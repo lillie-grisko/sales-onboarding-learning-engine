@@ -24,16 +24,16 @@ def get_connection():
             "account": creds["account"],
             "user": creds["user"],
             "warehouse": creds.get("warehouse"),
-            "role": creds.get("role"),
         }
         if creds.get("token"):
-            connect_kwargs["authenticator"] = "oauth"
+            connect_kwargs["authenticator"] = "programmatic_access_token"
             connect_kwargs["token"] = creds["token"]
             connect_kwargs["login_timeout"] = 15
-            print(f"[snowflake_utils] Connecting with oauth/PAT as {creds['user']} to {creds['account']}")
+            print(f"[snowflake_utils] Connecting with PAT as {creds['user']} to {creds['account']}")
         else:
             connect_kwargs["password"] = creds.get("password")
             connect_kwargs["login_timeout"] = 15
+            connect_kwargs["role"] = creds.get("role")
         try:
             conn = snowflake.connector.connect(**connect_kwargs)
             print("[snowflake_utils] Connection successful")
