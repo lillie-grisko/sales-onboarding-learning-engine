@@ -12,7 +12,19 @@ def get_connection():
         from snowflake.snowpark.context import get_active_session
         return get_active_session().connection
     except Exception:
-        return snowflake.connector.connect(connection_name=CONNECTION_NAME)
+        pass
+
+    if hasattr(st, "secrets") and "snowflake" in st.secrets:
+        creds = st.secrets["snowflake"]
+        return snowflake.connector.connect(
+            account=creds["account"],
+            user=creds["user"],
+            password=creds.get("password"),
+            warehouse=creds.get("warehouse"),
+            role=creds.get("role"),
+        )
+
+    return snowflake.connector.connect(connection_name=CONNECTION_NAME)
 
 
 def _run_query(sql: str, params=None):
