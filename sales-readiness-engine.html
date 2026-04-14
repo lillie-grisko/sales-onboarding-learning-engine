@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Readiness Engine — Builder Framework</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --sf-blue: #29B5E8;
+    --sf-dark: #11263B;
+    --sf-navy: #1B3A57;
+    --sf-mid: #2D5F8A;
+    --sf-light: #E8F4FB;
+    --sf-gray: #64748b;
+    --sf-border: #CBD5E1;
+    --green: #10B981;
+    --amber: #F59E0B;
+    --purple: #8B5CF6;
+    --red: #EF4444;
+    --text: #1E293B;
+    --text-light: #475569;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    background: linear-gradient(135deg, var(--sf-dark) 0%, var(--sf-navy) 60%, var(--sf-mid) 100%);
+    color: #fff;
+    padding: 80px 80px 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    page-break-after: always;
+  }
+
+  .cover-snowflake {
+    font-size: 48px;
+    margin-bottom: 40px;
+  }
+
+  .cover-tag {
+    display: inline-block;
+    align-self: flex-start;
+    background: var(--sf-blue);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+  }
+
+  .cover h1 {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .cover h1 span {
+    color: var(--sf-blue);
+  }
+
+  .cover .cover-sub {
+    font-size: 20px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    max-width: 600px;
+    margin-bottom: 60px;
+  }
+
+  .cover-meta {
+    display: flex;
+    gap: 48px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 32px;
+  }
+
+  .cover-meta-item label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .cover-meta-item span {
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  /* ── PAGE LAYOUT ── */
+  .page {
+    padding: 60px 80px;
+    page-break-after: always;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .page:last-child {
+    page-break-after: avoid;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-number {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sf-blue);
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--sf-dark);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .page-sub {
+    font-size: 16px;
+    color: var(--text-light);
+    margin-bottom: 40px;
+    font-weight: 400;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--sf-dark);
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
+
+  h3:first-of-type { margin-top: 0; }
+
+  p {
+    color: var(--text-light);
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 3px;
+    background: linear-gradient(90deg, var(--sf-blue), transparent);
+    margin-bottom: 40px;
+    border-radius: 2px;
+  }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .card-grid-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .card {
+    background: #f8fafc;
+    border: 1px solid var(--sf-border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .card-blue {
+    background: var(--sf-light);
+    border-color: var(--sf-blue);
+    border-left: 4px solid var(--sf-blue);
+  }
+
+  .card-green {
+    background: #f0fdf4;
+    border-left: 4px solid var(--green);
+  }
+
+  .card-amber {
+    background: #fffbeb;
+    border-left: 4px solid var(--amber);
+  }
+
+  .card-purple {
+    background: #faf5ff;
+    border-left: 4px solid var(--purple);
+  }
+
+  .card-dark {
+    background: var(--sf-dark);
+    color: #fff;
+    border: none;
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--sf-dark);
+    margin-bottom: 6px;
+  }
+
+  .card-dark h4 { color: #fff; }
+
+  .card p {
+    font-size: 13px;
+    color: var(--text-light);
+    margin: 0;
+  }
+
+  .card-dark p { color: rgba(255,255,255,0.65); }
+
+  /* ── COMPARE TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+    font-size: 13px;
+  }
+
+  thead tr {
+    background: var(--sf-dark);
+    color: #fff;
+  }
+
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  tbody tr:nth-child(even) { background: #f8fafc; }
+  tbody tr:hover { background: var(--sf-light); }
+
+  tbody td {
+    padding: 11px 16px;
+    color: var(--text-light);
+    border-bottom: 1px solid var(--sf-border);
+    vertical-align: top;
+  }
+
+  tbody td:first-child {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .tag-blue { background: var(--sf-light); color: var(--sf-blue); }
+  .tag-green { background: #dcfce7; color: #16a34a; }
+  .tag-amber { background: #fef3c7; color: #d97706; }
+  .tag-purple { background: #ede9fe; color: #7c3aed; }
+  .tag-red { background: #fee2e2; color: #dc2626; }
+  .tag-gray { background: #f1f5f9; color: var(--sf-gray); }
+
+  /* ── ARCH DIAGRAM ── */
+  .arch {
+    background: var(--sf-dark);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 32px;
+  }
+
+  .arch-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .arch-layer {
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .arch-layer-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    width: 90px;
+    flex-shrink: 0;
+  }
+
+  .arch-layer-content {
+    flex: 1;
+  }
+
+  .arch-layer-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .arch-layer-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .arch-layer-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+
+  .layer-app { background: rgba(41,181,232,0.15); border: 1px solid rgba(41,181,232,0.4); }
+  .layer-ai { background: rgba(139,92,246,0.15); border: 1px solid rgba(139,92,246,0.4); }
+  .layer-data { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); }
+  .layer-source { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); }
+
+  .tag-app { background: rgba(41,181,232,0.2); color: var(--sf-blue); }
+  .tag-ai { background: rgba(139,92,246,0.2); color: #a78bfa; }
+  .tag-data { background: rgba(16,185,129,0.2); color: var(--green); }
+  .tag-source { background: rgba(245,158,11,0.2); color: var(--amber); }
+
+  /* ── PHASE TIMELINE ── */
+  .phases {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 32px;
+    position: relative;
+  }
+
+  .phase {
+    display: flex;
+    gap: 24px;
+    padding-bottom: 32px;
+    position: relative;
+  }
+
+  .phase:last-child { padding-bottom: 0; }
+
+  .phase-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 48px;
+    flex-shrink: 0;
+  }
+
+  .phase-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    flex-shrink: 0;
+    color: #fff;
+    z-index: 1;
+  }
+
+  .phase-line {
+    width: 2px;
+    flex: 1;
+    background: var(--sf-border);
+    margin-top: 4px;
+  }
+
+  .phase:last-child .phase-line { display: none; }
+
+  .phase-body {
+    flex: 1;
+    padding-top: 8px;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .phase-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--sf-dark);
+  }
+
+  .phase-duration {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sf-gray);
+    background: #f1f5f9;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .phase-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .phase-items li {
+    font-size: 13px;
+    color: var(--text-light);
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .phase-items li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--sf-blue);
+    font-weight: 700;
+  }
+
+  /* ── SQL BLOCK ── */
+  .sql-block {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .sql-block-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 12px;
+  }
+
+  .sql-block code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    color: #e2e8f0;
+    display: block;
+    white-space: pre;
+  }
+
+  .sql-kw { color: #93c5fd; font-weight: 600; }
+  .sql-fn { color: #a78bfa; }
+  .sql-str { color: #86efac; }
+  .sql-comment { color: #475569; }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat-box {
+    background: var(--sf-light);
+    border: 1px solid rgba(41,181,232,0.3);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--sf-blue);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .stat-sub {
+    font-size: 11px;
+    color: var(--sf-gray);
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    background: var(--sf-light);
+    border-left: 4px solid var(--sf-blue);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+
+  .callout p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--sf-dark);
+    font-weight: 500;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cover { min-height: 100vh; }
+    .page { max-width: 100%; }
+    .uc-modal-overlay { display: none !important; }
+  }
+
+  /* ── USE CASE MODAL ── */
+  .uc-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding: 7px 14px;
+    background: var(--sf-blue);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .uc-trigger:hover { background: #1a73e8; transform: translateY(-1px); }
+
+  .uc-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 15, 30, 0.72);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    padding: 40px 24px;
+    overflow-y: auto;
+    animation: fadeIn 0.18s ease;
+  }
+  .uc-modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .uc-modal {
+    background: #fff;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 880px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.28);
+    overflow: hidden;
+    animation: slideUp 0.2s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .uc-modal-header {
+    background: linear-gradient(135deg, var(--sf-dark), var(--sf-navy));
+    padding: 28px 32px 24px;
+    position: relative;
+  }
+  .uc-modal-area-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sf-blue);
+    margin-bottom: 8px;
+  }
+  .uc-modal-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+    line-height: 1.3;
+  }
+  .uc-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .uc-modal-close:hover { background: rgba(255,255,255,0.24); }
+
+  .uc-modal-body {
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .uc-field {
+    background: #f8f9fc;
+    border-radius: 10px;
+    padding: 18px 20px;
+    border-left: 4px solid var(--sf-blue);
+  }
+  .uc-field.field-green { border-left-color: var(--sf-green); }
+  .uc-field.field-purple { border-left-color: var(--sf-purple); }
+  .uc-field.field-orange { border-left-color: #f97316; }
+  .uc-field.field-red { border-left-color: #ef4444; }
+  .uc-field-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
+  .uc-field-content {
+    font-size: 13px;
+    color: var(--text-dark);
+    line-height: 1.6;
+  }
+  .uc-field-content strong { color: var(--sf-blue); }
+  .uc-field.full-width { grid-column: 1 / -1; }
+
+  .uc-objections {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .uc-objection {
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    border: 1px solid #e2e8f0;
+  }
+  .uc-objection-q {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+  }
+  .uc-objection-a {
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.55;
+  }
+  .uc-modal-footer {
+    padding: 16px 32px;
+    background: #f8f9fc;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .uc-discovery-pill {
+    display: inline-block;
+    background: #e8f0fe;
+    color: var(--sf-blue);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 3px 4px 3px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ COVER ═══ -->
+<div class="cover">
+  <div>
+    <div class="cover-snowflake">❄️</div>
+    <div class="cover-tag">Builder Framework · April 2026</div>
+    <h1>Sales Readiness<br><span>Engine</span></h1>
+    <p class="cover-sub">A blueprint for AI-powered, always-current sales enablement on Snowflake — where content is generated from live product data, personalized by role, and continuously updated without a course author.</p>
+  </div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <label>Audience</label>
+      <span>Engineering &amp; Enablement Team</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Coverage</label>
+      <span>5 Product Areas · 4 Seller Roles · 27 Lessons</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Status</label>
+      <span>Prototype Running · Summit 2026 Target</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Prepared by</label>
+      <span>Lillie Grisko</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ 0. WHAT IS THIS ═══ -->
+<div class="page">
+  <div class="section-number">00 · Overview</div>
+  <h2>The Sales Learning Engine</h2>
+  <p class="page-sub">A Snowflake-native platform that generates, personalizes, and continuously updates sales enablement content — powered by live product data and Cortex AI.</p>
+  <div class="divider"></div>
+
+  <div class="callout">
+    <p>This is not a course. It is an engine. It generates lesson content from live Snowflake data, personalizes it by seller role, teaches reps when and why customers buy — and coaches them through the conversation before it happens.</p>
+  </div>
+
+  <div class="card-grid card-grid-3" style="margin-bottom: 32px;">
+    <div class="card card-blue">
+      <div class="card-icon">🎯</div>
+      <h4>For Sales Leaders</h4>
+      <p>A platform that tells you which reps are ready to sell Cortex, which product areas have coverage gaps, and which lessons are driving the most practice activity — without waiting for an LMS completion report.</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--sf-blue); font-weight: 600;">Start with Sections 01 → 02 → 03</p>
+    </div>
+    <div class="card card-green">
+      <div class="card-icon">📚</div>
+      <h4>For Enablement &amp; L&amp;D</h4>
+      <p>A curriculum built on use cases, not feature lists. Every lesson follows a six-step learning sequence — product overview, use case mapping, discovery questions, objection handling, proof points, and AI coaching — designed to produce revenue-ready sellers, not course completions.</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--sf-blue); font-weight: 600;">Start with Sections 02 → 03 → 04</p>
+    </div>
+    <div class="card card-purple">
+      <div class="card-icon">🔧</div>
+      <h4>For Engineering &amp; Data Teams</h4>
+      <p>A Streamlit in Snowflake application backed by Dynamic Tables, Cortex Search, Cortex Complete, and a four-layer data architecture. The full technical design, schema DDL, and phased build plan are in Sections 05 through 09.</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--sf-blue); font-weight: 600;">Start with Sections 05 → 06 → 07 → 08 → 09</p>
+    </div>
+  </div>
+
+  <div style="background:#f8fafc;border:1px solid var(--sf-border);border-radius:10px;padding:20px 24px;margin-bottom:32px;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sf-gray);margin-bottom:14px;">How to read this document — status legend</div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;">
+      <span><span class="tag tag-green" style="margin-right:6px;">Live Now</span>Working in the current prototype</span>
+      <span><span class="tag tag-amber" style="margin-right:6px;">Phase 2</span>Next build milestone (~1 week)</span>
+      <span><span class="tag tag-purple" style="margin-right:6px;">Phase 3</span>Analytics &amp; reporting layer</span>
+      <span><span class="tag tag-red" style="margin-right:6px;">Phase 4</span>Agentic scale &amp; full integrations</span>
+    </div>
+    <p style="margin:12px 0 0;font-size:13px;color:var(--text-light);">Sections 01–02 describe the prototype as it runs today. Sections 03–04 mix live capabilities with planned enhancements — status tags identify which is which. Sections 05–09 are the technical build guide for engineering teams.</p>
+  </div>
+
+  <h3>What this document covers</h3>
+  <div class="card-grid card-grid-2">
+    <div class="card">
+      <h4>The learning design</h4>
+      <p>How the curriculum is structured, what a seller experiences in a lesson, how use cases are taught, and how the AI coach turns product knowledge into conversation readiness.</p>
+    </div>
+    <div class="card">
+      <h4>The technical architecture</h4>
+      <p>How the engine works — the data pipeline, AI services, application layer, and schema design that make the content live, personalized, and measurable.</p>
+    </div>
+    <div class="card">
+      <h4>The use case library</h4>
+      <p>Ten fully designed customer use cases across five product areas — each with buyer persona, problem statement, Snowflake solution, discovery questions, and objection map.</p>
+    </div>
+    <div class="card">
+      <h4>The build plan</h4>
+      <p>Four phased milestones from working prototype to production platform, with effort estimates, ownership, and what becomes available to the field at each phase.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ 1. VISION ═══ -->
+<div class="page">
+  <div class="section-number">01 · Vision</div>
+  <h2>The Problem with Static Courses</h2>
+  <p class="page-sub">Sales enablement content has a shelf life. The moment it's published, it starts going stale.</p>
+  <div class="divider"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Dimension</th>
+        <th>Traditional (Articulate Rise)</th>
+        <th>Sales Readiness Engine</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Content freshness</td>
+        <td>Static at publish time</td>
+        <td>Live — PLT data refreshes hourly</td>
+      </tr>
+      <tr>
+        <td>Feature accuracy</td>
+        <td>May reference deprecated previews</td>
+        <td>Always reflects current availability</td>
+      </tr>
+      <tr>
+        <td>"What's New"</td>
+        <td>Requires manual course rebuild</td>
+        <td>Auto-badge: features updated last 90 days</td>
+      </tr>
+      <tr>
+        <td>Practice</td>
+        <td>Multiple-choice knowledge checks</td>
+        <td>AI role-play coach per lesson</td>
+      </tr>
+      <tr>
+        <td>Maintenance cost</td>
+        <td>High — requires ID + rebuild cycle</td>
+        <td>Zero — content layer self-updates</td>
+      </tr>
+      <tr>
+        <td>Progress tracking</td>
+        <td>LMS completion only</td>
+        <td>Per-lesson engagement, chat history, scores</td>
+      </tr>
+      <tr>
+        <td>Role personalization</td>
+        <td>One version for every role — AE, SE, ACE, SDR see identical material</td>
+        <td>4 personalized paths — AI framing, summaries, and coaching tailored per role</td>
+      </tr>
+      <tr>
+        <td>Delivery</td>
+        <td>Linear click-through in LMS</td>
+        <td>Non-linear, interactive, always-on</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <p>The core shift: course content stops being a <em>document</em> and becomes a <em>query</em>. Every time a rep opens a lesson, the content is generated from what Snowflake actually ships today.</p>
+  </div>
+
+  <div class="card-grid card-grid-3">
+    <div class="card card-blue">
+      <div class="card-icon">🎯</div>
+      <h4>Always Accurate</h4>
+      <p>Lesson content reflects real PLT data — GA, Preview, and upcoming features — never outdated copy.</p>
+    </div>
+    <div class="card card-green">
+      <div class="card-icon">🤖</div>
+      <h4>AI-Generated</h4>
+      <p>Cortex Complete synthesizes PLT features into lesson summaries and coaches reps through practice scenarios.</p>
+    </div>
+    <div class="card card-purple">
+      <div class="card-icon">📈</div>
+      <h4>Measurable</h4>
+      <p>Every interaction — lesson views, coach conversations, quiz attempts — is tracked and reportable.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ 2. CURRENT STATE ═══ -->
+<div class="page">
+  <div class="section-number">02 · Capabilities</div>
+  <h2>The Learning Engine — What It Does</h2>
+  <p class="page-sub">A working demonstration of a new kind of sales enablement — always current, role-aware, and powered by Snowflake's own AI.</p>
+  <div class="divider"></div>
+
+  <div style="background:var(--sf-dark);border-radius:10px;padding:20px 24px;margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Try the prototype now</div>
+      <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;">The app is live on Streamlit Cloud — accessible to anyone with the link.</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);">Select your role, pick a product area, and open a lesson to see live PLT data and Cortex AI in action.</div>
+    </div>
+    <a href="https://sales-app-learning-engine-vsenpwkkyrmgcvf4rwkirn.streamlit.app/" target="_blank" style="flex-shrink:0;background:var(--sf-blue);color:#fff;font-size:13px;font-weight:700;padding:10px 20px;border-radius:6px;text-decoration:none;white-space:nowrap;">Open the App →</a>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-num">27</div>
+      <div class="stat-label">Lessons structured</div>
+      <div class="stat-sub">Across 5 product areas — each with learning objectives, an AI practice coach, and live product data</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">3,867</div>
+      <div class="stat-label">PLT features indexed</div>
+      <div class="stat-sub">PLT = Product Launch Tracker, Snowflake's internal catalog of every shipped feature. The engine reads it live — no manual updates needed.</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Seller roles supported</div>
+      <div class="stat-sub">AE · SE · ACE · SDR — every lesson is reframed by role so each seller sees only what matters for their job</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Product areas covered</div>
+      <div class="stat-sub">Platform · AI &amp; Cortex · Analytics · Data Engineering · Apps &amp; Collaboration</div>
+    </div>
+  </div>
+
+  <h3>What a seller can do after completing this curriculum</h3>
+  <p style="font-size: 14px; color: var(--text-light); margin-bottom: 20px;">These are the terminal outcomes — the behaviors a rep demonstrates in the field, not the content they consumed in a lesson. Every section of this document traces back to one of these.</p>
+  <div class="card-grid card-grid-2" style="margin-bottom: 32px;">
+    <div class="card card-blue">
+      <h4>✅ Identify the right use case for a buyer</h4>
+      <p>Given a buyer's title, industry, and the signals from a discovery call, the rep can name the one or two Snowflake use cases most likely to resonate — and explain why this customer has this problem.</p>
+    </div>
+    <div class="card card-blue">
+      <h4>✅ Ask the questions that surface the need</h4>
+      <p>For each use case, the rep has three to five discovery questions they can deploy naturally — questions that let the customer name their own problem without being pitched at.</p>
+    </div>
+    <div class="card card-blue">
+      <h4>✅ Map the problem to Snowflake's capability</h4>
+      <p>The rep can explain — specifically, not generically — how a Snowflake product or feature solves the customer's stated problem. With current feature names, availability status, and cloud support.</p>
+    </div>
+    <div class="card card-blue">
+      <h4>✅ Handle the top objections with confidence</h4>
+      <p>For each use case, the rep knows the three to five objections most likely to come up — and has a response that acknowledges the concern and redirects to Snowflake's differentiated answer.</p>
+    </div>
+    <div class="card card-blue">
+      <h4>✅ Reference a proof point from a similar customer</h4>
+      <p>The rep can name a real customer — in the buyer's industry, with the buyer's problem — who solved it with Snowflake. They know the outcome and can reference it in an email the same day.</p>
+    </div>
+    <div class="card card-blue">
+      <h4>✅ Practice the conversation before it happens</h4>
+      <p>The rep has run the actual conversation with an AI coach who played the buyer, pushed back with real objections, and scored the response — before they've ever been in front of the customer.</p>
+    </div>
+  </div>
+
+  <h3>The prototype demonstrates six core capabilities</h3>
+  <div class="card-grid card-grid-2">
+    <div class="card">
+      <h4>🎯 Learns who you are, teaches accordingly</h4>
+      <p>A seller selects their role — AE, SE, ACE, or SDR — at the start. Every piece of AI-generated content throughout the session is framed specifically for that role and what they need to know.</p>
+    </div>
+    <div class="card">
+      <h4>📡 Pulls live product data, not static slides</h4>
+      <p>The engine connects directly to Snowflake's Product Launch Tracker (PLT) — the internal database of every Snowflake feature, its release status, target quarter, and supported clouds. Over 3,867 features indexed today. When the PLT updates, the engine reflects it. No course author required.</p>
+    </div>
+    <div class="card">
+      <h4>✍️ Writes lesson content on demand</h4>
+      <p>Snowflake's own AI (Cortex) generates a fresh, role-specific lesson overview the moment a seller opens it — grounded in real product data, not a deck written months ago.</p>
+    </div>
+    <div class="card">
+      <h4>🔔 Surfaces what's new automatically</h4>
+      <p>The engine identifies features that launched or updated in the last 90 days and flags them in every lesson. Sellers see what just changed without waiting for a course update cycle.</p>
+    </div>
+    <div class="card">
+      <h4>🤝 Coaches sellers through real conversations</h4>
+      <p>Each lesson includes an AI practice coach with a scenario tailored to the product area and seller role. Reps can rehearse customer conversations before they happen — with immediate AI feedback.</p>
+    </div>
+    <div class="card">
+      <h4>💬 Answers product questions instantly</h4>
+      <p>Sellers can ask free-form questions about any product area — "Which features are GA on Azure?" or "How does this compare to Databricks?" — and get answers grounded in live PLT data, not a search engine.</p>
+    </div>
+  </div>
+
+  <h3>What's live today vs. what's coming</h3>
+  <table style="margin-bottom:32px;">
+    <thead><tr><th>Capability</th><th>Current Prototype</th><th>Roadmap</th></tr></thead>
+    <tbody>
+      <tr><td>App hosting &amp; auth</td><td><span class="tag tag-green">Live</span> Streamlit Cloud, shared link</td><td>Phase 1: SiS with Snowflake SSO</td></tr>
+      <tr><td>Role selection (AE / SE / ACE / SDR)</td><td><span class="tag tag-green">Live</span> Full personalization</td><td>—</td></tr>
+      <tr><td>AI lesson overview (Cortex Complete)</td><td><span class="tag tag-green">Live</span> llama3-70b, grounded in PLT</td><td>Phase 2: pre-cached nightly summaries</td></tr>
+      <tr><td>Live PLT features per lesson</td><td><span class="tag tag-green">Live</span> ILIKE keyword matching</td><td>Phase 2: Cortex Search semantic retrieval</td></tr>
+      <tr><td>What's New badge (last 90 days)</td><td><span class="tag tag-green">Live</span> Auto-detected from PLT dates</td><td>—</td></tr>
+      <tr><td>Ask the PLT (free-form Q&amp;A)</td><td><span class="tag tag-green">Live</span> Cortex Complete</td><td>Phase 2: Cortex Analyst semantic view</td></tr>
+      <tr><td>AI practice coach</td><td><span class="tag tag-green">Live</span> Basic role-play per lesson</td><td>Phase 2: use-case-grounded scenarios + scoring</td></tr>
+      <tr><td>Use case library (per lesson)</td><td><span class="tag tag-amber">Phase 2</span></td><td>Buyer persona, objection map, proof point</td></tr>
+      <tr><td>Raven customer proof points</td><td><span class="tag tag-amber">Phase 2</span></td><td>Cortex Search over Raven index</td></tr>
+      <tr><td>Progress persistence (across sessions)</td><td><span class="tag tag-amber">Phase 1</span> In-session only</td><td>Phase 1: USER_EVENTS table in Snowflake</td></tr>
+      <tr><td>Manager readiness dashboard</td><td><span class="tag tag-purple">Phase 3</span></td><td>Rep coverage, coach engagement, scores</td></tr>
+    </tbody>
+  </table>
+
+  <h3>What a seller actually experiences</h3>
+  <p style="font-size: 14px; color: var(--text-light); margin-bottom: 20px;">From clicking the link to finishing a practice scenario — three steps, no friction. The lesson design behind each step is detailed in Section 03.</p>
+  <div class="phases">
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--sf-blue);">1</div>
+        <div class="phase-line"></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header"><div class="phase-title">Opens the app</div><span class="tag tag-green">Live Now</span></div>
+        <p style="margin: 0; font-size: 13px; color: var(--text-light);">The prototype runs on Streamlit Cloud — sellers open the shared link and are in immediately. <strong>Phase 1 target:</strong> migrated to Streamlit in Snowflake (SiS), where Snowflake SSO handles authentication automatically — no separate credentials, no LMS enrollment, no IT ticket required.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--sf-blue);">2</div>
+        <div class="phase-line"></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header"><div class="phase-title">Selects their role — everything personalizes instantly</div></div>
+        <p style="margin: 0; font-size: 13px; color: var(--text-light);">AE, SE, ACE, or SDR. Every piece of AI-generated content from this point forward — lesson framing, discovery questions, coach scenarios, difficulty level — is written specifically for that role's day-to-day reality.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--sf-blue);">3</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header"><div class="phase-title">Enters a lesson — follows the six-step learning sequence</div></div>
+        <p style="margin: 0; font-size: 13px; color: var(--text-light);">Every lesson runs the same structured path: product overview → use case library → discovery questions → objection handling → customer proof point → AI practice coach. The rep leaves knowing the product, knowing when customers need it, and having already practiced the conversation. See Section 03 for the full lesson design.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ 3. CURRICULUM DESIGN ═══ -->
+<div class="page">
+  <div class="section-number">03 · Curriculum Design</div>
+  <h2>Use Cases Are the Core of Sales Readiness</h2>
+  <p class="page-sub">Knowing a feature is not the same as knowing when a customer needs it. The engine teaches both — and connects them explicitly.</p>
+  <div class="divider"></div>
+
+  <div class="callout" style="margin-bottom:28px;">
+    <p>Most enablement stops at <strong>product knowledge</strong>. A rep finishes a course knowing what Cortex does. They don't know which customer problem to attach it to, which buyer to call, or what question to ask to surface the need. Use case learning closes that gap.</p>
+  </div>
+
+  <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:10px;padding:20px 24px;margin-bottom:32px;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#7c3aed;margin-bottom:10px;">Skill Domains — foundation for Phase 3 reporting</div>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:14px;">Every lesson is already tagged to one of five seller skill domains. These tags are the foundation for Phase 3 skills mapping — connecting lesson activity to competency coverage so managers see <em>what a rep can do</em>, not just what they clicked through.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <span class="tag tag-blue">Product &amp; Platform Knowledge</span>
+      <span class="tag tag-green">Technical Discovery &amp; Value Selling</span>
+      <span class="tag tag-purple">POC Execution &amp; Getting the Technical Win</span>
+      <span class="tag tag-amber">Competitive Intelligence</span>
+      <span class="tag tag-gray">Customer Outcomes &amp; Expansion</span>
+    </div>
+  </div>
+
+  <h3>The anatomy of every use case</h3>
+  <p style="font-size: 14px; color: var(--text-light); margin-bottom: 20px;">Every use case taught in the engine follows the same six-part structure. AI assembles this on demand — grounded in PLT features, customer stories from Raven, and sales plays from Seismic.</p>
+  <div class="card-grid card-grid-3">
+    <div class="card card-blue">
+      <div class="card-icon">👤</div>
+      <h4>Buyer Persona + Industry</h4>
+      <p>Who has this problem. What their title is. What industry signals make this a warm conversation. What they read and care about at the executive level.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔥</div>
+      <h4>The Business Problem</h4>
+      <p>What keeps this buyer up at night. Framed in their language — not Snowflake's. The problem exists before the rep arrives; the rep's job is to name it precisely.</p>
+    </div>
+    <div class="card card-green">
+      <div class="card-icon">🎯</div>
+      <h4>Snowflake's Solution</h4>
+      <p>The specific product capabilities that solve the problem — pulled live from the PLT. Not a generic pitch. A mapping from their pain to our product, with feature names and release status.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📋</div>
+      <h4>Proof Point</h4>
+      <p>A real customer story — sourced from Raven — where a customer in a similar industry and situation deployed this solution and saw measurable results. Specific is credible.</p>
+    </div>
+    <div class="card card-purple">
+      <div class="card-icon">⚔️</div>
+      <h4>Competitive Angle</h4>
+      <p>Where Databricks, AWS, or the incumbent falls short in this specific use case. Not generic competitive positioning — use-case-specific differentiation that holds up in a technical conversation.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔁</div>
+      <h4>Objection Map</h4>
+      <p>The three to five objections this buyer raises most often — and the responses that work. Drawn from field patterns, not marketing scripts. The AI coach will use these in the practice session.</p>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="section-number">03 · Curriculum Design</div>
+  <h2>How Use Cases Are Taught by Role</h2>
+  <p class="page-sub">The same use case is taught four different ways. The AI generates a role-specific frame for each seller — because an AE and an SE need completely different things from the same story.</p>
+  <div class="divider"></div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom: 32px;">
+    <div class="card card-blue">
+      <h4>AE — Account Executive</h4>
+      <p style="font-size: 13px; color: var(--text-light); margin-bottom: 12px;">Business value, access to power, and deal mechanics</p>
+      <p>The AE use case frame focuses on <strong>why the business cares</strong> and <strong>who to call</strong>. For the LLM data exposure use case: what's the financial and reputational risk of a data breach via an external AI API? Who is the economic buyer — the CISO or the CDO? What's the competitive dynamic — is the customer currently evaluating Databricks? What does the business case look like at renewal?</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--sf-blue); font-weight: 600;">Coach practice: Navigating a CFO who wants to know why Snowflake is worth the premium over "just using OpenAI."</p>
+    </div>
+    <div class="card card-purple">
+      <h4>SE — Solutions Engineer</h4>
+      <p style="font-size: 13px; color: var(--text-light); margin-bottom: 12px;">Technical architecture, implementation path, and proof of concept</p>
+      <p>The SE use case frame goes deep on <strong>how it works</strong> and <strong>how to prove it</strong>. For the same use case: what does the Cortex Complete API call look like? How does network policy enforcement prevent data egress? What's the latency profile? How does this integrate with an existing MLOps stack? What does a minimal POC look like that a technical buyer can run in a day?</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--sf-blue); font-weight: 600;">Coach practice: A skeptical VP of Engineering who says "we already have a fine-tuned model deployed on our own infrastructure."</p>
+    </div>
+    <div class="card card-green">
+      <h4>ACE — Account Cloud Engineer</h4>
+      <p style="font-size: 13px; color: var(--text-light); margin-bottom: 12px;">Expansion, adoption, and customer health</p>
+      <p>The ACE use case frame focuses on <strong>what's already running</strong> and <strong>where growth comes from</strong>. For the same use case: which customers in the book have a data team doing ad hoc ML on Snowflake data today but using external API keys? That's a land-and-expand signal. What does a QBR conversation look like that introduces Cortex Complete to a customer who's been on Snowflake for two years and hasn't touched AI yet?</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--sf-blue); font-weight: 600;">Coach practice: A long-tenured customer who says "we're happy with what we have — we don't need AI."</p>
+    </div>
+    <div class="card">
+      <h4>SDR — Sales Development Rep</h4>
+      <p style="font-size: 13px; color: var(--text-light); margin-bottom: 12px;">Discovery, qualification, and pipeline creation</p>
+      <p>The SDR use case frame focuses on <strong>ICP signals</strong> and <strong>the question that opens the door</strong>. For the same use case: what job postings, company news, or LinkedIn activity signals that a company is actively building AI and has a CISO who would care about data perimeter? What's the one-sentence problem frame that gets a VP of Data to take a call? How does this use case connect to a specific pain that shows up in the SDR's outbound sequence?</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--sf-blue); font-weight: 600;">Coach practice: Cold outreach to a Head of Data at a Series C fintech — 30 seconds to earn the meeting.</p>
+    </div>
+  </div>
+
+  <h3>How use cases integrate into the lesson flow</h3>
+  <p style="font-size: 14px; color: var(--text-light); margin-bottom: 16px;">Use cases are not a separate module — they are woven into every lesson as the connective tissue between product knowledge and practice readiness.</p>
+  <div style="background:#fef3c7;border-left:4px solid var(--amber);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:24px;">
+    <p style="margin:0;font-size:13px;color:#92400e;"><strong>What's live vs. planned:</strong> Steps 1 and 6 are fully working in the current prototype. Steps 2–5 are the Phase 2 build — they describe the target lesson design, not what the app does today.</p>
+  </div>
+  <div class="phases">
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--sf-blue);">1</div>
+        <div class="phase-line"></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header"><div class="phase-title">Product Overview — what Snowflake ships</div><span class="tag tag-green">Live Now</span></div>
+        <p style="margin: 0; font-size: 13px; color: var(--text-light);">The lesson opens with a live AI-generated summary of the product area — features pulled from the PLT, framed by role. This is the "what" layer: capabilities, release status, cloud availability.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--sf-blue);">2</div>
+        <div class="phase-line"></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header"><div class="phase-title">Use Case Library — why a customer buys it</div><span class="tag tag-amber">Phase 2</span></div>
+        <p style="margin: 0; font-size: 13px; color: var(--text-light);">The lesson surfaces two to four use cases for the product area — each with buyer persona, problem statement, Snowflake solution, proof point, and competitive angle. This is the "when and why" layer. The rep reads customer problems, not product features.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--sf-blue);">3</div>
+        <div class="phase-line"></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header"><div class="phase-title">Discovery Question Bank — how to surface the need</div><span class="tag tag-amber">Phase 2</span></div>
+        <p style="margin: 0; font-size: 13px; color: var(--text-light);">Each use case includes three to five discovery questions the rep can use in a real conversation. These are framed for the rep's role — an AE's questions sound different from an SDR's. The questions are designed to let the customer name their own problem.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--sf-blue);">4</div>
+        <div class="phase-line"></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header"><div class="phase-title">Objection Library — what pushback sounds like</div><span class="tag tag-amber">Phase 2</span></div>
+        <p style="margin: 0; font-size: 13px; color: var(--text-light);">Common objections for each use case are surfaced here — drawn from field patterns. Not generic "why Snowflake" rebuttals. Use-case-specific responses that acknowledge the technical or business concern and redirect to Snowflake's differentiated answer.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--sf-blue);">5</div>
+        <div class="phase-line"></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header"><div class="phase-title">Customer Proof Point — show don't tell</div><span class="tag tag-amber">Phase 2</span></div>
+        <p style="margin: 0; font-size: 13px; color: var(--text-light);">A real customer story from Raven — matched to the use case by industry and buyer type. The rep sees how a company like their prospect solved the same problem with Snowflake, the measurable outcome, and the quote they can use in an email.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--sf-blue);">6</div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header"><div class="phase-title">AI Practice Coach — run the conversation</div><span class="tag tag-green">Live Now</span></div>
+        <p style="margin: 0; font-size: 13px; color: var(--text-light);">The coach presents a scenario drawn directly from the use case library — a specific buyer, a specific problem, a specific competitive threat. The rep runs the conversation. The coach plays the buyer, introduces objections from the objection library, and scores the rep's response against use case fluency — not just product knowledge.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="page">
+  <div class="section-number">03 · Curriculum Design</div>
+  <h2>Where Use Case Content Comes From</h2>
+  <p class="page-sub">Use cases are not static. They are assembled dynamically from four live sources — and updated automatically as the field and the product evolve.</p>
+  <div class="divider"></div>
+
+  <div class="card-grid card-grid-2" style="margin-bottom: 32px;">
+    <div class="card card-blue">
+      <div class="card-icon">📡</div>
+      <h4>Product Launch Tracker (PLT) — already live</h4>
+      <p>The PLT is the source of truth for product capabilities mapped to each use case. When a feature moves from Preview to GA, the use case card updates automatically — the solution mapping reflects what Snowflake actually ships today, not what the deck said six months ago.</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--sf-blue); font-weight: 600;">Status: Live. 3,867 features indexed. Queried at lesson load time.</p>
+    </div>
+    <div class="card card-green">
+      <div class="card-icon">📖</div>
+      <h4>Raven — customer story database</h4>
+      <p>Raven holds Snowflake's library of validated customer stories — indexed by industry, buyer, use case, and product. Every use case in the learning engine surfaces a Raven story matched to the buyer persona and problem type. Reps get a proof point they can use immediately.</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--sf-blue); font-weight: 600;">Status: Integration scoped for Phase 2. Stories surfaced via Cortex Search against Raven index.</p>
+    </div>
+    <div class="card card-purple">
+      <div class="card-icon">📁</div>
+      <h4>Seismic — sales plays and competitive intel</h4>
+      <p>Seismic holds sales plays, battle cards, and competitive positioning materials. For each use case, the engine surfaces the relevant play and the competitive angle — pulled at lesson time, not baked into static content. When the competitive landscape shifts, the use case frame shifts with it.</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--sf-blue); font-weight: 600;">Status: Integration scoped for Phase 3. Connected via Cortex Search against Seismic document index.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧠</div>
+      <h4>Field Intelligence — patterns from the team</h4>
+      <p>As reps practice with the AI coach, the conversations generate data. Which objections come up most often? Which use cases are getting the most practice time? Which product areas have low coach scores? This signals where the use case library needs to be strengthened — and feeds a continuous improvement loop.</p>
+      <p style="margin-top: 10px; font-size: 12px; color: var(--sf-blue); font-weight: 600;">Status: Event tracking scoped for Phase 3. Coach conversations logged and analyzed via Cortex.</p>
+    </div>
+  </div>
+
+  <h3>How use case content is governed and validated</h3>
+  <div class="callout" style="margin-bottom: 24px;">
+    <p>AI-generated content is only as trustworthy as the data it's grounded in. The engine does not generate free-form assertions about Snowflake capabilities — every use case is assembled from three validated sources, and the AI's role is synthesis and framing, not invention.</p>
+  </div>
+  <div class="card-grid card-grid-3" style="margin-bottom: 32px;">
+    <div class="card">
+      <h4>Source grounding, not free generation</h4>
+      <p>Every AI-generated lesson and use case is grounded in explicit records from the PLT, Raven, and Seismic. Cortex cannot describe a feature that isn't in the PLT or reference a customer that isn't in Raven. The AI synthesizes; the sources validate.</p>
+    </div>
+    <div class="card">
+      <h4>Feature accuracy checkpoints</h4>
+      <p>The PLT includes GA status, cloud availability, and preview flags. The engine surfaces these directly — a rep sees "GA on AWS and Azure, Preview on GCP" — and is never shown a claim that contradicts the PLT record. No course author needed to review the update.</p>
+    </div>
+    <div class="card">
+      <h4>Enablement review layer (Phase 2)</h4>
+      <p>Phase 2 introduces a curator dashboard where Enablement can flag, edit, or pin specific use case content before it surfaces to reps. High-stakes use cases (competitive positioning, new product launches) can require human review before going live — without blocking the entire engine.</p>
+    </div>
+  </div>
+
+  <div style="padding: 28px 32px; background: linear-gradient(135deg, var(--sf-dark), var(--sf-navy)); border-radius: 12px; color: #fff;">
+    <div style="font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--sf-blue); margin-bottom: 12px;">What this means for the field</div>
+    <p style="font-size: 16px; font-weight: 500; color: #fff; line-height: 1.65; margin: 0;">A rep who completes a lesson doesn't just know what Snowflake ships — they know which customers have the problem it solves, how to ask the question that surfaces the need, how to handle the top three objections, and what customer story to send the next day. That is the difference between product-trained and revenue-ready.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ 4. MANAGER VIEW ═══ -->
+<div class="page">
+  <div class="section-number">04 · Manager View</div>
+  <h2>What a Manager Sees — and Acts On <span class="tag tag-purple" style="font-size:13px;vertical-align:middle;margin-left:12px;">Phase 3 Roadmap</span></h2>
+  <p class="page-sub">This section describes planned Phase 3 capabilities. None of the dashboards or reporting features below exist in the current prototype — they are the target state once the analytics layer (USER_EVENTS table + manager app) is built.</p>
+  <div class="divider"></div>
+
+  <div class="callout">
+    <p>Traditional LMS reporting tells a manager who clicked through a course. This engine tells a manager who can actually sell. The difference is behavioral signals — practice activity, topic coverage, coach scores — surfaced at the rep and team level.</p>
+  </div>
+
+  <h3>What the engine surfaces for managers</h3>
+  <div class="card-grid card-grid-3" style="margin-bottom: 32px;">
+    <div class="card card-blue">
+      <div class="card-icon">🎯</div>
+      <h4>Coverage gaps by product area</h4>
+      <p>Which product areas have zero lesson activity on the team. Which use cases have never been practiced. Where a manager should focus coaching before the next pipeline review.</p>
+    </div>
+    <div class="card card-blue">
+      <div class="card-icon">📊</div>
+      <h4>AI coach engagement by rep</h4>
+      <p>How many practice conversations each rep has run. Which reps are completing lessons without opening the coach — completing the content without doing the work that matters.</p>
+    </div>
+    <div class="card card-blue">
+      <div class="card-icon">🔔</div>
+      <h4>New feature readiness</h4>
+      <p>Which reps have completed lessons on features that launched in the last 90 days. Which reps are likely to mention a feature in a customer call without knowing it's still in preview.</p>
+    </div>
+    <div class="card">
+      <h4>Lesson completion vs. practice completion</h4>
+      <p>The engine distinguishes between a rep who read a lesson and a rep who practiced a scenario. A completion report that conflates the two gives managers a false picture of readiness.</p>
+    </div>
+    <div class="card">
+      <h4>Team-level use case fluency</h4>
+      <p>Across the team, which use cases have the highest coach engagement and the highest objection handling scores. Which use cases are being avoided. What to role-play in the next team meeting.</p>
+    </div>
+    <div class="card">
+      <h4>Individual prep before a big call</h4>
+      <p>A manager can check whether a rep has done the lesson and practice run for the specific use case that matches an upcoming opportunity — before the call, not after the loss.</p>
+    </div>
+  </div>
+
+  <h3>What managers can do that they can't do today</h3>
+  <div class="card-grid card-grid-2">
+    <div class="card card-green">
+      <h4>Before a pipeline review</h4>
+      <p>Pull up the team's readiness dashboard. Identify which reps have gaps in the product area matching the biggest deals in stage. Assign the lesson and the coach scenario. Confirm the rep has practiced before the manager's prep call.</p>
+    </div>
+    <div class="card card-green">
+      <h4>After a product launch</h4>
+      <p>See which reps have completed the new feature lesson within the first two weeks. Follow up with the ones who haven't. Know — before the customer asks — that the team can speak to the new capability accurately.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ 5. FULL ARCH ═══ -->
+<div class="page">
+  <div class="section-number">05 · Architecture</div>
+  <h2>Full System Architecture</h2>
+  <p class="page-sub">Four layers — source data, data layer, AI layer, and application layer.</p>
+  <div class="divider"></div>
+
+  <div class="callout" style="margin-bottom: 28px;">
+    <p>The following sections cover how the engine is built — the schema design, Cortex AI services, data pipeline, build phases, and team ownership — for teams who will implement or extend the platform.</p>
+  </div>
+
+  <div class="arch">
+    <div class="arch-layers">
+
+      <div class="arch-layer layer-app">
+        <div class="arch-layer-label">App Layer</div>
+        <div class="arch-layer-content">
+          <div class="arch-layer-title">Streamlit in Snowflake (SiS)</div>
+          <div class="arch-layer-desc">3-column layout · Lesson nav · AI summary panel · Practice coach · Progress tracking · Snowflake SSO auth</div>
+        </div>
+        <div class="arch-layer-tag tag-app">Streamlit</div>
+      </div>
+
+      <div class="arch-layer layer-ai">
+        <div class="arch-layer-label">AI Layer</div>
+        <div class="arch-layer-content">
+          <div class="arch-layer-title">Cortex Complete + Cortex Search + Cortex Analyst</div>
+          <div class="arch-layer-desc">Role-personalized lesson summaries · Coach conversations · PLT Q&amp;A (Ask the PLT) · Semantic feature retrieval</div>
+        </div>
+        <div class="arch-layer-tag tag-ai">Cortex AI</div>
+      </div>
+
+      <div class="arch-layer layer-data">
+        <div class="arch-layer-label">Data Layer</div>
+        <div class="arch-layer-content">
+          <div class="arch-layer-title">Dynamic Tables + Event Table + Summary Cache</div>
+          <div class="arch-layer-desc">Auto-refreshing PLT views per lesson · User progress events · Pre-computed AI summaries · Nightly refresh Tasks</div>
+        </div>
+        <div class="arch-layer-tag tag-data">Snowflake</div>
+      </div>
+
+      <div class="arch-layer layer-source">
+        <div class="arch-layer-label">Source Data</div>
+        <div class="arch-layer-content">
+          <div class="arch-layer-title">SALES.RAVEN.PLT_SEARCH_DATA + Course Curriculum</div>
+          <div class="arch-layer-desc">3,867 product features · GA / Preview / Pipeline status · 27 lessons across 5 product areas · 4 seller roles (AE, SE, ACE, SDR)</div>
+        </div>
+        <div class="arch-layer-tag tag-source">Source</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-2">
+    <div class="card">
+      <h4>🔑 Key design principle</h4>
+      <p>The curriculum skeleton (lesson structure, objectives, Bloom's levels) is static code. The content layer (feature lists, summaries, coach responses) is always runtime-generated from live Snowflake data.</p>
+    </div>
+    <div class="card">
+      <h4>🔄 Refresh strategy</h4>
+      <p>Dynamic Tables auto-refresh PLT views every hour. Summary cache table refreshed nightly via Snowflake Task. App reads cache first; falls back to live Cortex Complete on cache miss.</p>
+    </div>
+    <div class="card">
+      <h4>🔐 Auth &amp; access</h4>
+      <p>Deployed as Streamlit in Snowflake — Snowflake SSO handles all auth. Role-based access controls which courses a user can see.</p>
+    </div>
+    <div class="card">
+      <h4>📊 Multi-course ready</h4>
+      <p>One schema, one app framework. Adding a new course = inserting rows into <code>COURSES</code> and <code>LESSONS</code> tables. No code changes required.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ 6. DATA LAYER ═══ -->
+<div class="page">
+  <div class="section-number">06 · Data Layer</div>
+  <h2>Tables &amp; Schema Design</h2>
+  <p class="page-sub">Everything the platform needs to be persistent, measurable, and multi-course.</p>
+  <div class="divider"></div>
+
+  <h3>Core tables</h3>
+
+  <div class="sql-block">
+    <div class="sql-block-label">DDL — Curriculum Tables</div>
+    <code><span class="sql-kw">CREATE TABLE</span> ENABLEMENT.SALES_READINESS.COURSES (
+  COURSE_ID    VARCHAR   <span class="sql-kw">PRIMARY KEY</span>,
+  TITLE        VARCHAR,
+  SUBTITLE     VARCHAR,
+  LEVEL        VARCHAR,          <span class="sql-comment">-- '100', '200', '300'</span>
+  AUDIENCE     VARCHAR,
+  TOTAL_LESSONS INT,
+  CREATED_AT   TIMESTAMP_NTZ <span class="sql-kw">DEFAULT</span> <span class="sql-fn">CURRENT_TIMESTAMP</span>()
+);
+
+<span class="sql-kw">CREATE TABLE</span> ENABLEMENT.SALES_READINESS.LESSONS (
+  LESSON_ID    INT,
+  COURSE_ID    VARCHAR   <span class="sql-kw">REFERENCES</span> COURSES(COURSE_ID),
+  TITLE        VARCHAR,
+  SUBTITLE     VARCHAR,
+  DURATION     VARCHAR,
+  BLOOM_LEVEL  VARCHAR,          <span class="sql-comment">-- Remember | Understand | Apply | Analyze | Evaluate | Create</span>
+  OBJECTIVES   VARIANT,          <span class="sql-comment">-- JSON array of strings</span>
+  PLT_KEYWORDS VARIANT,          <span class="sql-comment">-- JSON array: used for feature matching</span>
+  COACH_PERSONA VARCHAR,
+  COACH_SCENARIO VARCHAR
+);</code>
+  </div>
+
+  <div class="sql-block">
+    <div class="sql-block-label">DDL — User Progress &amp; Summary Cache</div>
+    <code><span class="sql-kw">CREATE TABLE</span> ENABLEMENT.SALES_READINESS.USER_EVENTS (
+  EVENT_ID     VARCHAR <span class="sql-kw">DEFAULT</span> <span class="sql-fn">UUID_STRING</span>(),
+  USER_NAME    VARCHAR <span class="sql-kw">DEFAULT</span> <span class="sql-fn">CURRENT_USER</span>(),
+  COURSE_ID    VARCHAR,
+  LESSON_ID    INT,
+  EVENT_TYPE   VARCHAR,          <span class="sql-comment">-- 'lesson_view' | 'coach_message' | 'quiz_attempt'</span>
+  EVENT_DATA   VARIANT,
+  CREATED_AT   TIMESTAMP_NTZ <span class="sql-kw">DEFAULT</span> <span class="sql-fn">CURRENT_TIMESTAMP</span>()
+);
+
+<span class="sql-kw">CREATE TABLE</span> ENABLEMENT.SALES_READINESS.SUMMARY_CACHE (
+  COURSE_ID    VARCHAR,
+  LESSON_ID    INT,
+  SUMMARY_TEXT TEXT,
+  PLT_SNAPSHOT VARIANT,          <span class="sql-comment">-- features used to generate this summary</span>
+  GENERATED_AT TIMESTAMP_NTZ <span class="sql-kw">DEFAULT</span> <span class="sql-fn">CURRENT_TIMESTAMP</span>(),
+  <span class="sql-kw">PRIMARY KEY</span> (COURSE_ID, LESSON_ID)
+);</code>
+  </div>
+
+  <h3>Dynamic Table for PLT feature views</h3>
+  <div class="sql-block">
+    <div class="sql-block-label">Dynamic Table — Auto-refreshing lesson features</div>
+    <code><span class="sql-kw">CREATE OR REPLACE DYNAMIC TABLE</span> ENABLEMENT.SALES_READINESS.LESSON_FEATURES
+  <span class="sql-fn">TARGET_LAG</span> = <span class="sql-str">'1 hour'</span>
+  WAREHOUSE = ENABLEMENT_WH
+<span class="sql-kw">AS</span>
+  <span class="sql-kw">SELECT</span>
+    L.COURSE_ID, L.LESSON_ID, L.TITLE <span class="sql-kw">AS</span> LESSON_TITLE,
+    P.FEATURE_NAME, P.CURRENT_AVAILABILITY, P.TARGET_QUARTER,
+    P.TARGET_END_DATE, P.AVAILABLE_CLOUDS, P.SEARCH_TEXT,
+    <span class="sql-fn">CASE WHEN</span> P.TARGET_END_DATE &gt;= <span class="sql-fn">DATEADD</span>(day, -90, <span class="sql-fn">CURRENT_DATE</span>()) <span class="sql-fn">THEN</span> <span class="sql-kw">TRUE</span> <span class="sql-fn">ELSE</span> <span class="sql-kw">FALSE</span> <span class="sql-fn">END</span> <span class="sql-kw">AS</span> IS_NEW
+  <span class="sql-kw">FROM</span> ENABLEMENT.SALES_READINESS.LESSONS L,
+       SALES.RAVEN.PLT_SEARCH_DATA P,
+       <span class="sql-fn">LATERAL FLATTEN</span>(L.PLT_KEYWORDS) KW
+  <span class="sql-kw">WHERE</span> P.SEARCH_TEXT <span class="sql-kw">ILIKE</span> <span class="sql-fn">CONCAT</span>(<span class="sql-str">'%'</span>, KW.VALUE::VARCHAR, <span class="sql-str">'%'</span>)
+    <span class="sql-kw">AND</span> P.CURRENT_AVAILABILITY <span class="sql-kw">IN</span> (<span class="sql-str">'Generally Available'</span>, <span class="sql-str">'Public Preview'</span>, <span class="sql-str">'Private Preview'</span>);</code>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ 7. AI LAYER ═══ -->
+<div class="page">
+  <div class="section-number">07 · AI Layer</div>
+  <h2>Cortex AI Services</h2>
+  <p class="page-sub">Three Cortex capabilities working together — search, generation, and natural language querying.</p>
+  <div class="divider"></div>
+
+  <div class="card-grid card-grid-3">
+    <div class="card card-purple">
+      <div class="card-icon">🔍</div>
+      <h4>Cortex Search</h4>
+      <p>Semantic vector search over <code>PLT_SEARCH_DATA</code>. Replaces brittle ILIKE keyword matching with meaning-based retrieval. "What features relate to governance?" actually understands the question.</p>
+    </div>
+    <div class="card card-blue">
+      <div class="card-icon">✍️</div>
+      <h4>Cortex Complete</h4>
+      <p>llama3-70b generates lesson summaries and coach responses at runtime. Given PLT features as context, produces accurate, current, sales-ready copy.</p>
+    </div>
+    <div class="card card-green">
+      <div class="card-icon">💬</div>
+      <h4>Cortex Analyst <span class="tag tag-amber" style="font-size:10px;vertical-align:middle;">Phase 2</span></h4>
+      <p><strong>Today:</strong> "Ask the PLT" uses Cortex Complete (<code>llama3-70b</code>) for free-form Q&amp;A — answers are grounded in PLT features surfaced per lesson. <strong>Phase 2:</strong> Replace with a Cortex Analyst semantic view over <code>PLT_SEARCH_DATA</code> for structured, SQL-backed answers to questions like "Which features are GA on Azure?" — more accurate, auditable, and no hallucination risk.</p>
+    </div>
+  </div>
+
+  <h3>Cortex Search setup</h3>
+  <div class="sql-block">
+    <div class="sql-block-label">Create Cortex Search Service</div>
+    <code><span class="sql-kw">CREATE OR REPLACE</span> CORTEX SEARCH SERVICE ENABLEMENT.SALES_READINESS.PLT_SEARCH
+  <span class="sql-fn">ON</span> SEARCH_TEXT
+  <span class="sql-fn">ATTRIBUTES</span> FEATURE_NAME, CURRENT_AVAILABILITY, TARGET_QUARTER, AVAILABLE_CLOUDS
+  WAREHOUSE = ENABLEMENT_WH
+  TARGET_LAG = <span class="sql-str">'1 hour'</span>
+<span class="sql-kw">AS</span>
+  <span class="sql-kw">SELECT</span> FEATURE_NAME, CURRENT_AVAILABILITY, TARGET_QUARTER,
+         AVAILABLE_CLOUDS, TARGET_END_DATE, SEARCH_TEXT
+  <span class="sql-kw">FROM</span> SALES.RAVEN.PLT_SEARCH_DATA
+  <span class="sql-kw">WHERE</span> CURRENT_AVAILABILITY <span class="sql-kw">IN</span> (<span class="sql-str">'Generally Available'</span>, <span class="sql-str">'Public Preview'</span>, <span class="sql-str">'Private Preview'</span>);</code>
+  </div>
+
+  <h3>Nightly summary refresh (Snowflake Task)</h3>
+  <div class="sql-block">
+    <div class="sql-block-label">Task — Nightly summary cache refresh</div>
+    <code><span class="sql-kw">CREATE OR REPLACE TASK</span> ENABLEMENT.SALES_READINESS.REFRESH_SUMMARIES
+  WAREHOUSE = ENABLEMENT_WH
+  SCHEDULE = <span class="sql-str">'USING CRON 0 2 * * * America/Los_Angeles'</span>
+<span class="sql-kw">AS</span>
+  <span class="sql-kw">MERGE INTO</span> ENABLEMENT.SALES_READINESS.SUMMARY_CACHE T
+  <span class="sql-kw">USING</span> (
+    <span class="sql-kw">SELECT</span>
+      L.COURSE_ID, L.LESSON_ID,
+      <span class="sql-fn">SNOWFLAKE.CORTEX.COMPLETE</span>(<span class="sql-str">'llama3-70b'</span>,
+        <span class="sql-fn">CONCAT</span>(<span class="sql-str">'Write a lesson overview for: '</span>, L.TITLE,
+               <span class="sql-str">'. Features: '</span>, <span class="sql-fn">LISTAGG</span>(F.FEATURE_NAME, <span class="sql-str">', '</span>))
+      ) <span class="sql-kw">AS</span> SUMMARY_TEXT
+    <span class="sql-kw">FROM</span> ENABLEMENT.SALES_READINESS.LESSONS L
+    <span class="sql-kw">JOIN</span> ENABLEMENT.SALES_READINESS.LESSON_FEATURES F <span class="sql-kw">USING</span> (COURSE_ID, LESSON_ID)
+    <span class="sql-kw">GROUP BY</span> L.COURSE_ID, L.LESSON_ID, L.TITLE
+  ) S <span class="sql-kw">ON</span> T.COURSE_ID = S.COURSE_ID <span class="sql-kw">AND</span> T.LESSON_ID = S.LESSON_ID
+  <span class="sql-kw">WHEN MATCHED THEN UPDATE SET</span> T.SUMMARY_TEXT = S.SUMMARY_TEXT, T.GENERATED_AT = <span class="sql-fn">CURRENT_TIMESTAMP</span>()
+  <span class="sql-kw">WHEN NOT MATCHED THEN INSERT</span> (COURSE_ID, LESSON_ID, SUMMARY_TEXT) <span class="sql-kw">VALUES</span> (S.COURSE_ID, S.LESSON_ID, S.SUMMARY_TEXT);</code>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ 8. BUILD PHASES ═══ -->
+<div class="page">
+  <div class="section-number">08 · Build Plan</div>
+  <h2>Phased Build Roadmap</h2>
+  <p class="page-sub">From working prototype to production platform in four phases.</p>
+  <div class="divider"></div>
+
+  <div class="phases">
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--green);">1</div>
+        <div class="phase-line"></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header">
+          <div class="phase-title">Foundation — Deploy &amp; Persist</div>
+          <div class="phase-duration">~1 week</div>
+          <span class="tag tag-green">Highest impact</span>
+        </div>
+        <ul class="phase-items">
+          <li>Create ENABLEMENT database + SALES_READINESS schema</li>
+          <li>Create COURSES, LESSONS, USER_EVENTS, SUMMARY_CACHE tables</li>
+          <li>Migrate 27-lesson course catalog from Python dicts → Snowflake rows (COURSES + LESSONS tables)</li>
+          <li>Deploy prototype as Streamlit in Snowflake (SiS)</li>
+          <li>Wire app to read from tables instead of hardcoded Python</li>
+          <li>Verify SSO auth and shareable URL works for target users</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--sf-blue);">2</div>
+        <div class="phase-line"></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header">
+          <div class="phase-title">Intelligence — Search &amp; Caching</div>
+          <div class="phase-duration">~1 week</div>
+          <span class="tag tag-blue">Big quality leap</span>
+        </div>
+        <ul class="phase-items">
+          <li>Create Cortex Search Service over PLT_SEARCH_DATA</li>
+          <li>Replace ILIKE queries with Cortex Search API calls</li>
+          <li>Create LESSON_FEATURES Dynamic Table (1-hour refresh)</li>
+          <li>Build REFRESH_SUMMARIES nightly Task</li>
+          <li>Update app to read from SUMMARY_CACHE (fallback to live Cortex)</li>
+          <li>Measure and compare load time before/after</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--purple);">3</div>
+        <div class="phase-line"></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header">
+          <div class="phase-title">Analytics — Progress &amp; Reporting</div>
+          <div class="phase-duration">~1 week</div>
+          <span class="tag tag-purple">Manager visibility</span>
+        </div>
+        <ul class="phase-items">
+          <li>Write USER_EVENTS on: lesson view, coach message, quiz attempt</li>
+          <li>Build manager dashboard in second SiS app (or second page)</li>
+          <li>Metrics: completion rate by lesson, avg coach turns, quiz scores</li>
+          <li>Cortex Analyst semantic view over USER_EVENTS + LESSONS</li>
+          <li>Natural language queries: "Which lessons have lowest completion?"</li>
+          <li><strong>Skills mapping:</strong> tag each lesson to a seller competency (Product Knowledge · Technical Discovery · Value Selling · Competitive · POC Execution) so manager reports show readiness by skill, not just by course completion</li>
+          <li>Surface skill coverage gaps per rep — e.g. "3 lessons completed, 0 in Competitive" — to give managers a coaching action, not just a completion percentage</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-left">
+        <div class="phase-dot" style="background: var(--amber);">4</div>
+        <div class="phase-line"></div>
+      </div>
+      <div class="phase-body">
+        <div class="phase-header">
+          <div class="phase-title">Scale — Agentic Course Creation</div>
+          <div class="phase-duration">~2 weeks</div>
+          <span class="tag tag-amber">Agents replace authoring</span>
+        </div>
+        <ul class="phase-items">
+          <li>Build agentic course creator: Cortex Agents generate new lesson catalogs from PLT + Seismic + Raven — no PDF authoring or manual lesson definition required</li>
+          <li>Connect Seismic: customer stories, competitive intel, and sales plays per lesson</li>
+          <li>Connect Raven: live customer proof points per product area</li>
+          <li>Integrate with Docebo for unified seller progress and completion tracking</li>
+          <li>Auto-generate Summit Edition briefs when PLT is updated at launch</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ 9. ROLES ═══ -->
+<div class="page">
+  <div class="section-number">09 · Team &amp; Roles</div>
+  <h2>Who Builds What</h2>
+  <p class="page-sub">Estimated effort and ownership for each phase.</p>
+  <div class="divider"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Owner</th>
+        <th>Skills needed</th>
+        <th>Effort</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Schema DDL + tables</td>
+        <td>Data Engineer</td>
+        <td>Snowflake SQL, DDL</td>
+        <td><span class="tag tag-green">0.5 days</span></td>
+      </tr>
+      <tr>
+        <td>Dynamic Tables + Task</td>
+        <td>Data Engineer</td>
+        <td>Dynamic Tables, Snowflake Tasks</td>
+        <td><span class="tag tag-green">1 day</span></td>
+      </tr>
+      <tr>
+        <td>Cortex Search Service</td>
+        <td>Data Engineer</td>
+        <td>Cortex Search DDL</td>
+        <td><span class="tag tag-green">0.5 days</span></td>
+      </tr>
+      <tr>
+        <td>Streamlit SiS deploy</td>
+        <td>Full-stack / Enablement Eng</td>
+        <td>Python, Streamlit, Snowflake connector</td>
+        <td><span class="tag tag-amber">2 days</span></td>
+      </tr>
+      <tr>
+        <td>Progress tracking UI</td>
+        <td>Full-stack / Enablement Eng</td>
+        <td>Python, Streamlit</td>
+        <td><span class="tag tag-amber">2 days</span></td>
+      </tr>
+      <tr>
+        <td>Manager dashboard</td>
+        <td>Analytics Engineer</td>
+        <td>SQL, Streamlit or Sigma</td>
+        <td><span class="tag tag-amber">2 days</span></td>
+      </tr>
+      <tr>
+        <td>Cortex Analyst semantic view</td>
+        <td>Analytics Engineer</td>
+        <td>Semantic view YAML / SQL</td>
+        <td><span class="tag tag-amber">1 day</span></td>
+      </tr>
+      <tr>
+        <td>Multi-course generalization</td>
+        <td>Full-stack</td>
+        <td>Python refactor</td>
+        <td><span class="tag tag-red">3 days</span></td>
+      </tr>
+      <tr>
+        <td>Curriculum content (new courses)</td>
+        <td>Enablement / PMM</td>
+        <td>Instructional design, PDF → SQL</td>
+        <td><span class="tag tag-red">Per course: 2 days</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+
+</body>
+</html>
