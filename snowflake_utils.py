@@ -1,7 +1,11 @@
 import os
 import json
+import logging
 import snowflake.connector
 import streamlit as st
+
+logging.basicConfig(level=logging.WARNING)
+logger = logging.getLogger(__name__)
 
 CONNECTION_NAME = os.getenv("SNOWFLAKE_CONNECTION_NAME") or "sales-enablement"
 
@@ -25,16 +29,24 @@ def get_connection():
         if creds.get("token"):
             connect_kwargs["authenticator"] = "programmatic_access_token"
             connect_kwargs["token"] = creds["token"]
+            print(f"[snowflake_utils] Connecting with PAT auth as {creds['user']} to {creds['account']}")
         else:
             connect_kwargs["password"] = creds.get("password")
-        return snowflake.connector.connect(**connect_kwargs)
+        try:
+            conn = snowflake.connector.connect(**connect_kwargs)
+            print("[snowflake_utils] Connection successful")
+            return conn
+        except Exception as e:
+            print(f"[snowflake_utils] Connection failed: {e}")
+            logger.error(f"Snowflake connection failed: {e}", exc_info=True)
+            raise
 
     return snowflake.connector.connect(connection_name=CONNECTION_NAME)
 
 
 def _run_query(sql: str, params=None):
-    conn = get_connection()
     try:
+        conn = get_connection()
         cur = conn.cursor()
         if params:
             cur.execute(sql, params)
@@ -42,7 +54,8 @@ def _run_query(sql: str, params=None):
             cur.execute(sql)
         return cur.fetchall(), [d[0] for d in cur.description]
     except Exception as e:
-        st.error(f"Query error: {e}")
+        print(f"[snowflake_utils] Query error: {e}")
+        logger.error(f"Query error: {e}", exc_info=True)
         return [], []
 
 
