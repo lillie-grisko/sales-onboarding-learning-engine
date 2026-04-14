@@ -16,13 +16,18 @@ def get_connection():
 
     if hasattr(st, "secrets") and "snowflake" in st.secrets:
         creds = st.secrets["snowflake"]
-        return snowflake.connector.connect(
-            account=creds["account"],
-            user=creds["user"],
-            password=creds.get("password"),
-            warehouse=creds.get("warehouse"),
-            role=creds.get("role"),
-        )
+        connect_kwargs = {
+            "account": creds["account"],
+            "user": creds["user"],
+            "warehouse": creds.get("warehouse"),
+            "role": creds.get("role"),
+        }
+        if creds.get("token"):
+            connect_kwargs["authenticator"] = "programmatic_access_token"
+            connect_kwargs["token"] = creds["token"]
+        else:
+            connect_kwargs["password"] = creds.get("password")
+        return snowflake.connector.connect(**connect_kwargs)
 
     return snowflake.connector.connect(connection_name=CONNECTION_NAME)
 
