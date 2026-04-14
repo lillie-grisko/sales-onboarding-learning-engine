@@ -8,7 +8,11 @@ CONNECTION_NAME = os.getenv("SNOWFLAKE_CONNECTION_NAME") or "sales-enablement"
 
 @st.cache_resource
 def get_connection():
-    return snowflake.connector.connect(connection_name=CONNECTION_NAME)
+    try:
+        from snowflake.snowpark.context import get_active_session
+        return get_active_session().connection
+    except Exception:
+        return snowflake.connector.connect(connection_name=CONNECTION_NAME)
 
 
 def _run_query(sql: str, params=None):
