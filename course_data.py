@@ -56,6 +56,7 @@ TOPICS = {
         "icon": "❄️",
         "color": "#29b5e8",
         "description": "Core architecture, compute, governance, security, and FinOps",
+        "course_objective": "By the end of this course, you will be able to run a complete platform sales motion — from qualifying the right persona in the first 5 minutes, through a discovery conversation that surfaces real pain, to a scoped technical win ready for SE handoff.",
         "lessons": [
             {
                 "id": 1,
@@ -167,6 +168,7 @@ TOPICS = {
         "icon": "🤖",
         "color": "#8b5cf6",
         "description": "Cortex AI, ML, intelligent agents, and AI-powered applications",
+        "course_objective": "By the end of this course, you will be able to qualify an enterprise AI opportunity, differentiate Snowflake's AI approach against Databricks and OpenAI on governance and data gravity, and move a CDO from 'exploring AI' to a scoped proof of concept in a single call.",
         "lessons": [
             {
                 "id": 1,
@@ -278,6 +280,7 @@ TOPICS = {
         "icon": "📊",
         "color": "#f59e0b",
         "description": "Snowsight, Cortex Analyst, and the partner BI ecosystem",
+        "course_objective": "By the end of this course, you will be able to sell an analytics modernization motion — from surfacing slow dashboards and BI sprawl through a targeted Snowsight or Cortex Analyst demo, to a value story the analytics champion can take to their CFO.",
         "lessons": [
             {
                 "id": 1,
@@ -372,6 +375,7 @@ TOPICS = {
         "icon": "⚙️",
         "color": "#10b981",
         "description": "Pipelines, Snowpark, Dynamic Tables, and the modern data stack",
+        "course_objective": "By the end of this course, you will be able to run a data engineering discovery conversation — identify pipeline fragility, tool sprawl, and cost pain, map each to a specific Snowflake capability, and close on a technical win proposal.",
         "lessons": [
             {
                 "id": 1,
@@ -466,6 +470,7 @@ TOPICS = {
         "icon": "🤝",
         "color": "#f97316",
         "description": "Marketplace, Native Apps, data sharing, and the collaboration ecosystem",
+        "course_objective": "By the end of this course, you will be able to identify the right collaboration or app platform opportunity — data monetization, partner sharing, or native app distribution — and run a sales motion that ends with a framing the customer's product team will fund.",
         "lessons": [
             {
                 "id": 1,
